@@ -55,10 +55,6 @@ class FileBuilderTest extends PHPUnit_Framework_TestCase
             'price' => 60,
         ]);
 
-        $expected  = '1    3000159.99' . PHP_EOL;
-        $expected .= '2A Product Name 1    000049.99' . PHP_EOL;
-        $expected .= '2A Product Name 2    000000050' . PHP_EOL;
-        $expected .= '2A Product Name 3    000000060' . PHP_EOL;
         $expected = <<<EXPECTED
 1    3000159.99
 2A Product Name 1    000049.99
