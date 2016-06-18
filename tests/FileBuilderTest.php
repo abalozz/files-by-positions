@@ -63,4 +63,19 @@ class FileBuilderTest extends PHPUnit_Framework_TestCase
 EXPECTED;
         $this->assertEquals($expected, $fileBuilder->build());
     }
+
+    function test_not_defined_row_definition_throw_an_exception()
+    {
+        $this->setExpectedException(
+            'FilesByPositions\RowDefinitionNotFoundException',
+            'Row definition of type [product] not found'
+        );
+        $fileBuilder = new FileBuilder();
+        $fileBuilder->addRow('product', [
+            'type' => 2,
+            'name' => 'A Product Name 1',
+            'price' => 49.99,
+        ]);
+        $fileBuilder->build();
+    }
 }

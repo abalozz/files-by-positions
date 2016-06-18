@@ -24,7 +24,7 @@ class FileBuilder
     {
         return implode(PHP_EOL, array_map(function ($row) {
             if (!isset($this->definitions[$row['type']])) {
-                throw new Exception('Row definition not found');
+                throw new RowDefinitionNotFoundException("Row definition of type [{$row['type']}] not found");
             }
 
             $rowString = $this->definitions[$row['type']]->build($row['content']);
