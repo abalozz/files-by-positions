@@ -1,4 +1,18 @@
 {
+    "name": "abalozz/files-by-positions",
+    "description": "Component to create txt files with data structured by positions",
+    "authors": [
+        {
+            "name": "Iván Abascal Lozano",
+            "email": "abalozz@outlook.com"
+        },
+        {
+            "name": "María Pérez",
+            "email": "mariaperezp90@gmail.com"
+        }
+    ],
+    "type": "library",
+    "license": "MIT",
     "require-dev": {
         "phpunit/phpunit": "4.8.*"
     },
