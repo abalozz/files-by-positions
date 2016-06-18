@@ -8,7 +8,20 @@ class RowDefinition
 
     public function __construct(array $format = [])
     {
-        $this->format = $format;
+        foreach ($format as $fieldName => $properties) {
+            $this->addFieldDefinition($fieldName, $properties);
+        }
+    }
+
+    public function addFieldDefinition($fieldName, $fieldDefinition = null)
+    {
+        if (!$fieldDefinition instanceof FieldDefinition) {
+            $fieldDefinition = new FieldDefinition($fieldName, $fieldDefinition);
+        }
+
+        $this->format[] = $fieldDefinition;
+
+        return $fieldDefinition;
     }
 
     public function getFormat()
@@ -18,29 +31,10 @@ class RowDefinition
 
     public function build(array $data = [])
     {
-        $line = '';
-        foreach ($this->format as $field => $properties) {
-            if (!is_array($properties)) {
-                $properties = [
-                    'size' => $properties,
-                    'string' => ' ',
-                    'type' => 'right',
-                ];
-            }
-
-            $types = [
-                'left' => STR_PAD_LEFT,
-                'right' => STR_PAD_RIGHT,
-                'both' => STR_PAD_BOTH,
-            ];
-
-            $attr = isset($data[$field]) ? $data[$field] : '';
-            $attr = mb_substr($attr, 0, $properties['size'], 'utf-8');
-            $attr = multibyte_str_pad($attr, $properties['size'], $properties['string'], $types[$properties['type']], 'utf-8');
-            $line .= $attr;
-        }
-
-        return $line;
+        return array_reduce($this->format, function ($line, $fieldDefinition) use ($data) {
+            $value = isset($data[$fieldDefinition->name]) ? $data[$fieldDefinition->name] : '';
+            return $line . $fieldDefinition->build($value);
+        }, '');
     }
 
     public function read($row)

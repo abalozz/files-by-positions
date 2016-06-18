@@ -7,19 +7,14 @@ class FileBuilderTest extends PHPUnit_Framework_TestCase
 {
     function test_file_content_generate()
     {
-        $definitionHeader = new RowDefinition([
-            'type' => 1,
-            'number_of_products' => [
-                'size' => 5,
-                'string' => ' ',
-                'type' => 'left',
-            ],
-            'total_price' => [
-                'size' => 9,
-                'string' => '0',
-                'type' => 'left',
-            ],
+        $definitionHeader = new RowDefinition();
+        $definitionHeader->addFieldDefinition('type', 1);
+        $definitionHeader->addFieldDefinition('number_of_products', [
+            'size' => 5,
+            'string' => ' ',
+            'type' => 'left',
         ]);
+        $definitionHeader->addFieldDefinition('total_price')->size(9)->string('0')->type('left');
 
         $definitionProduct = new RowDefinition([
             'type' => 1,
