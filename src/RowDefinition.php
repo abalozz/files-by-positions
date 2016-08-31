@@ -4,34 +4,34 @@ namespace FilesByPositions;
 
 class RowDefinition
 {
-    protected $format = [];
+    protected $fields = [];
 
-    public function __construct(array $format = [])
+    public function __construct(array $fields = [])
     {
-        foreach ($format as $fieldName => $properties) {
+        foreach ($fields as $fieldName => $properties) {
             $this->addFieldDefinition($fieldName, $properties);
         }
     }
 
-    public function addFieldDefinition($fieldName, $fieldDefinition = null)
+    public function addFieldDefinitions($fieldName, $fieldDefinition = null)
     {
         if (!$fieldDefinition instanceof FieldDefinition) {
             $fieldDefinition = new FieldDefinition($fieldName, $fieldDefinition);
         }
 
-        $this->format[] = $fieldDefinition;
+        $this->fields[] = $fieldDefinition;
 
         return $fieldDefinition;
     }
 
-    public function getFormat()
+    public function getFieldDefinitions()
     {
-        return $this->format;
+        return $this->fields;
     }
 
     public function build(array $data = [])
     {
-        return array_reduce($this->format, function ($line, $fieldDefinition) use ($data) {
+        return array_reduce($this->fields, function ($line, $fieldDefinition) use ($data) {
             $value = isset($data[$fieldDefinition->name]) ? $data[$fieldDefinition->name] : '';
             return $line . $fieldDefinition->build($value);
         }, '');
