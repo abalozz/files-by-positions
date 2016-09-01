@@ -51,4 +51,35 @@ class Row extends PHPUnit_Framework_TestCase
         $expected = '1   A Product Name   000049.99';
         $this->assertEquals($expected, $line);
     }
+
+    function test_read_row()
+    {
+        $definition = new RowDefinition([
+            'type' => [
+                'size' => 1,
+                'string' => ' ',
+                'type' => 'right',
+            ],
+            'name' => [
+                'size' => 20,
+                'string' => ' ',
+                'type' => 'both',
+            ],
+            'price' => [
+                'size' => 9,
+                'string' => '0',
+                'type' => 'left',
+            ],
+        ]);
+
+        $data = $definition->read('1   A Product Name   000049.99');
+
+        $expected = [
+            'type' => '1',
+            'name' => '   A Product Name   ',
+            'price' => '000049.99'
+        ];
+
+        $this->assertEquals($expected, $data);
+    }
 }

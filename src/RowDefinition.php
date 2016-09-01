@@ -4,13 +4,19 @@ namespace FilesByPositions;
 
 class RowDefinition
 {
-    protected $format = [];
+    protected $fields = [];
+    protected $id;
 
-    public function __construct(array $format = [])
+    public function __construct(array $fields = [])
     {
-        foreach ($format as $fieldName => $properties) {
+        foreach ($fields as $fieldName => $properties) {
             $this->addFieldDefinition($fieldName, $properties);
         }
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     public function addFieldDefinition($fieldName, $fieldDefinition = null)
@@ -19,19 +25,24 @@ class RowDefinition
             $fieldDefinition = new FieldDefinition($fieldName, $fieldDefinition);
         }
 
-        $this->format[] = $fieldDefinition;
+        $this->fields[] = $fieldDefinition;
 
         return $fieldDefinition;
     }
 
-    public function getFormat()
+    public function getFieldDefinitions()
     {
-        return $this->format;
+        return $this->fields;
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     public function build(array $data = [])
     {
-        return array_reduce($this->format, function ($line, $fieldDefinition) use ($data) {
+        return array_reduce($this->fields, function ($line, $fieldDefinition) use ($data) {
             $value = isset($data[$fieldDefinition->name]) ? $data[$fieldDefinition->name] : '';
             return $line . $fieldDefinition->build($value);
         }, '');
@@ -39,8 +50,14 @@ class RowDefinition
 
     public function read($row)
     {
-        throw new Exception('Method not implemented');
+        $data = [];
+        $position = 0;
 
-        return [];
+        foreach ($this->fields as $fieldName => $field) {
+            $data[$field->name] = substr($row, $position, $field->size);
+            $position = $position +  $field->size;
+        }
+
+        return $data;
     }
 }
