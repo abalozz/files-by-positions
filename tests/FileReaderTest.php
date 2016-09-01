@@ -7,32 +7,24 @@ class FileReaderTest extends PHPUnit_Framework_TestCase
 {
     function test_file_content_read()
     {
-        $definitionHeader = new RowDefinition();
-        $definitionHeader->addFieldDefinition('type', 1);
-        $definitionHeader->addFieldDefinition('number_of_products', [
-            'size' => 5,
-            'string' => ' ',
-            'type' => 'left',
+        $definitionHeader = new RowDefinition([
+            'type' => 1,
+            'number_of_products' => 5,
+            'total_price' => 9,
         ]);
-        $definitionHeader->addFieldDefinition('total_price')->size(9)->string('0')->type('left');
         $definitionHeader->setId('1');
 
         $definitionProduct = new RowDefinition([
             'type' => 1,
             'name' => 20,
-            'price' => [
-                'size' => 9,
-                'string' => '0',
-                'type' => 'left',
-            ],
+            'price' => 9,
         ]);
-
         $definitionProduct->setId('2');
 
         $fileReader = new FileReader();
         $fileReader->addRowDefinition('header', $definitionHeader);
         $fileReader->addRowDefinition('product', $definitionProduct);
-    
+
         $expected = [
             '0' => [
                 'type' => '1',
@@ -67,24 +59,16 @@ FILE;
             'Row identifier not found'
         );
 
-        $fileReader = new FileReader();
+        $file = '2A Product Name 1    000049.99';
+
         $definitionProduct = new RowDefinition([
             'type' => 1,
             'name' => 20,
-            'price' => [
-                'size' => 9,
-                'string' => '0',
-                'type' => 'left',
-            ],
+            'price' => 9,
         ]);
-        
+
+        $fileReader = new FileReader();
         $fileReader->addRowDefinition('product', $definitionProduct);
-
-
-        $file = <<<FILE
-2A Product Name 1    000049.99
-FILE;
-
         $fileReader->readFile($file);
     }
 }
