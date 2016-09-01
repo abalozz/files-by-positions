@@ -20,7 +20,7 @@ class FileReader
             foreach ($this->definitions as $type => $definition) {
                 $id = $definition->getId();
 
-                if (!isset($this->id)) {
+                if (!isset($id)) {
                     throw new RowIdNotFoundException('Row identifier not found');
                 }
 
